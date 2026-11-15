@@ -11,7 +11,13 @@
     ],
   },
   "files": [
-    { "kind": "folder", "path": "Journali", "target-membership": [ "Journali" ] },
+    { "path": "JournalEntry.swift", "target-membership": [ "Journali/compile-sources" ] },
+    { "path": "AddJournalView.swift", "target-membership": [ "Journali/compile-sources" ] },
+    { "path": "HomeView.swift", "target-membership": [ "Journali/compile-sources" ] },
+    { "path": "SplashView.swift", "target-membership": [ "Journali/compile-sources" ] },
+    { "path": "Assets.xcassets" },
+    { "path": "ContentView.swift", "target-membership": [ "Journali/compile-sources" ] },
+    { "path": "MyApp.swift", "target-membership": [ "Journali/compile-sources" ] },
     {
       "kind": "group",
       "name": "Products",
