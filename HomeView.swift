@@ -1,10 +1,10 @@
+
 //
 //  HomeView.swift
 //  Journali
 //
 //  Created by warood on 30/05/1448 AH.
 //
-
 
 import SwiftUI
 import SwiftData
@@ -15,6 +15,7 @@ enum JournalSortOption {
 }
 
 struct HomeView: View {
+
     @Environment(\.modelContext) private var modelContext
     @Query private var journals: [JournalEntry]
 
@@ -41,6 +42,7 @@ struct HomeView: View {
                 }
                 return $0.date > $1.date
             }
+
         case .entryDate:
             return filtered.sorted { $0.date > $1.date }
         }
@@ -48,14 +50,15 @@ struct HomeView: View {
 
     var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea()
+            JournaliColors.background.ignoresSafeArea()
 
-            VStack {
+            VStack(spacing: 0) {
+
                 // MARK: - Header
                 HStack {
                     Text("Journal")
                         .font(.system(size: 34, weight: .bold))
-                        .foregroundColor(.white)
+                        .foregroundStyle(JournaliColors.primaryText)
 
                     Spacer()
 
@@ -67,6 +70,7 @@ struct HomeView: View {
                                     swipedJournalID = nil
                                 }
                             }
+
                             Button("Sort by Entry Date") {
                                 withAnimation {
                                     sortOption = .entryDate
@@ -85,38 +89,47 @@ struct HomeView: View {
                                 .font(.system(size: 24))
                         }
                     }
-                    .foregroundColor(.white)
+                    .foregroundStyle(JournaliColors.primaryText)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
-                    .background(Color.gray.opacity(0.5))
+                    .background(JournaliColors.card)
                     .clipShape(Capsule())
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 20)
+                .padding(.bottom, 16)
 
                 // MARK: - Journal Content
                 if journals.isEmpty {
                     Spacer()
+
                     VStack(spacing: 16) {
-                        Image(systemName: "book.pages")
-                            .font(.system(size: 90))
-                            .foregroundColor(.white)
+                        Image("EmptyJournal")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 150, height: 150)
 
                         Text("Begin Your Journal")
                             .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(.white)
+                            .foregroundStyle(JournaliColors.accentText)
 
                         Text("Craft your personal diary, tap the\nplus icon to begin")
-                            .font(.system(size: 17))
-                            .foregroundColor(.white)
+                            .font(.system(size: 18, weight: .regular))
+                            .foregroundStyle(JournaliColors.primaryText)
                             .multilineTextAlignment(.center)
+                            .lineSpacing(4)
                     }
+                    .padding(.horizontal, 24)
+
                     Spacer()
                 } else {
                     ScrollView {
                         LazyVStack(spacing: 16) {
+                            
+                            
                             ForEach(filteredJournals) { journal in
                                 ZStack(alignment: .trailing) {
+                                    
                                     // Delete Button
                                     Button {
                                         journalToDelete = journal.id
@@ -126,11 +139,11 @@ struct HomeView: View {
                                             .font(.system(size: 22))
                                             .foregroundStyle(.white)
                                             .frame(width: 60, height: 60)
-                                            .background(Color.red)
+                                            .background(JournaliColors.destructive)
                                             .clipShape(Circle())
                                     }
                                     .padding(.trailing, 12)
-
+                                    
                                     // Journal Card
                                     JournalCard(
                                         journal: journal,
@@ -139,7 +152,9 @@ struct HomeView: View {
                                     .contentShape(RoundedRectangle(cornerRadius: 28))
                                     .onTapGesture {
                                         if swipedJournalID == journal.id {
-                                            withAnimation { swipedJournalID = nil }
+                                            withAnimation {
+                                                swipedJournalID = nil
+                                            }
                                         } else {
                                             editingJournal = journal
                                         }
@@ -160,27 +175,34 @@ struct HomeView: View {
                                 }
                             }
                         }
-                        .padding(.horizontal, 24)
-                        .padding(.top, 30)
+                            .padding(.horizontal, 24)
+                            .padding(.top, 14)
+                            
+                        }
                     }
-                }
 
                 // MARK: - Search Bar
-                HStack {
+                HStack(spacing: 12) {
                     Image(systemName: "magnifyingglass")
+
                     TextField("Search", text: $searchText)
-                        .tint(.white)
+                        .font(.system(size: 18, weight: .regular))
+                        .foregroundStyle(JournaliColors.primaryText)
+                        .tint(JournaliColors.primary)
+
                     Image(systemName: "mic.fill")
                 }
-                .foregroundColor(.white)
-                .padding(12)
-                .background(Color.gray.opacity(0.5))
+                .foregroundStyle(JournaliColors.secondaryText)
+                .padding(.horizontal, 16)
+                .frame(height: 48)
+                .background(JournaliColors.card)
                 .clipShape(Capsule())
                 .padding(.horizontal, 24)
                 .padding(.bottom, 20)
             }
         }
-        .preferredColorScheme(.dark)
+
+        // .preferredColorScheme(.dark)
 
         // MARK: - Add Journal
         .sheet(isPresented: $showAddJournal) {
@@ -209,6 +231,7 @@ struct HomeView: View {
             Button("Cancel", role: .cancel) {
                 journalToDelete = nil
             }
+
             Button("Delete", role: .destructive) {
                 if let id = journalToDelete,
                    let journal = journals.first(where: { $0.id == id }) {
@@ -225,7 +248,9 @@ struct HomeView: View {
 
     // MARK: - Bookmark
     private func toggleBookmark(_ id: UUID) {
-        guard let journal = journals.first(where: { $0.id == id }) else { return }
+        guard let journal = journals.first(where: { $0.id == id }) else {
+            return
+        }
         journal.isBookmarked.toggle()
         saveChanges()
     }
@@ -242,6 +267,7 @@ struct HomeView: View {
 
 // MARK: - Journal Card
 struct JournalCard: View {
+
     let journal: JournalEntry
     let onBookmark: () -> Void
 
@@ -250,28 +276,34 @@ struct JournalCard: View {
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(journal.title)
-                        .font(.system(size: 25, weight: .bold))
-                        .foregroundColor(Color(red: 0.72, green: 0.75, blue: 1))
+                        .font(.system(size: 24, weight: .semibold))
+                        .foregroundStyle(JournaliColors.accentText)
+
                     Text(journal.date, style: .date)
-                        .font(.system(size: 14))
-                        .foregroundColor(.white)
+                        .font(.system(size: 14, weight: .regular))
+                        .foregroundStyle(JournaliColors.secondaryText)
                 }
+
                 Spacer()
+
                 Button(action: onBookmark) {
                     Image(systemName: journal.isBookmarked ? "bookmark.fill" : "bookmark")
                         .font(.system(size: 24))
-                        .foregroundColor(Color(red: 0.72, green: 0.75, blue: 1))
+                        .foregroundStyle(JournaliColors.accentText)
                 }
+                .buttonStyle(.plain)
             }
+
             Text(journal.content)
-                .font(.system(size: 17))
-                .foregroundColor(.white)
+                .font(.system(size: 18, weight: .regular))
+                .foregroundStyle(JournaliColors.primaryText)
+                .lineSpacing(3)
                 .lineLimit(5)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(24)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(red: 0.29, green: 0.29, blue: 0.33))
+        .background(JournaliColors.card)
         .clipShape(RoundedRectangle(cornerRadius: 28))
     }
 }
@@ -280,4 +312,3 @@ struct JournalCard: View {
     HomeView()
         .modelContainer(for: JournalEntry.self, inMemory: true)
 }
-

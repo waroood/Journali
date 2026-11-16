@@ -8,6 +8,7 @@ struct MyApp: App {
 
         WindowGroup {
             ContentView()
+             //   .preferredColorScheme(.dark)
         }
         .modelContainer(for: JournalEntry.self)
     }

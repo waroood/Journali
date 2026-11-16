@@ -1,3 +1,4 @@
+
 //
 //  SplashView.swift
 //  Journali
@@ -10,34 +11,29 @@ import SwiftUI
 struct SplashView: View {
 
     var body: some View {
-
         ZStack {
-
-            // Background
-            Color.black
+            JournaliColors.background
                 .ignoresSafeArea()
 
             VStack(spacing: 12) {
-
-                // Temporary Journal Illustration
                 Image("JournalIcon")
                     .resizable()
                     .scaledToFit()
-                    .frame(width:160, height:160)
+                    .frame(width: 130, height: 130)
+                    .padding(.bottom, 4)
 
-                // App Name
                 Text("Journali")
-                    .font(.system(size: 40, weight: .bold))
-                    .foregroundColor(.white)
+                    .font(.system(size: 42, weight: .black))
+                    .foregroundStyle(JournaliColors.primaryText)
 
-                // Subtitle
                 Text("Your thoughts, your story")
-                    .font(.system(size: 16))
-                    .foregroundColor(.white)
-
+                    .font(.system(size: 20, weight: .regular))
+                    .foregroundStyle(JournaliColors.primaryText)
             }
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 24)
         }
-        .preferredColorScheme(.dark)
+        //.preferredColorScheme(.dark)
     }
 }
 

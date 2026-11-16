@@ -11,11 +11,12 @@
     ],
   },
   "files": [
+    { "path": "JournaliColors.swift", "target-membership": [ "Journali/compile-sources" ] },
     { "path": "JournalEntry.swift", "target-membership": [ "Journali/compile-sources" ] },
     { "path": "AddJournalView.swift", "target-membership": [ "Journali/compile-sources" ] },
     { "path": "HomeView.swift", "target-membership": [ "Journali/compile-sources" ] },
     { "path": "SplashView.swift", "target-membership": [ "Journali/compile-sources" ] },
-    { "path": "Assets.xcassets" },
+    { "path": "Assets.xcassets", "target-membership": [ "Journali/resources" ] },
     { "path": "ContentView.swift", "target-membership": [ "Journali/compile-sources" ] },
     { "path": "MyApp.swift", "target-membership": [ "Journali/compile-sources" ] },
     {

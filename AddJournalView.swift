@@ -1,9 +1,11 @@
+
 //
 //  AddJournalView.swift
 //  Journali
 //
 //  Created by warood on 30/05/1448 AH.
 //
+
 import SwiftUI
 
 struct AddJournalView: View {
@@ -39,12 +41,10 @@ struct AddJournalView: View {
     }
 
     var body: some View {
-
         VStack(alignment: .leading, spacing: 18) {
 
             // MARK: - Top Buttons
             HStack {
-
                 Button {
                     if hasChanges {
                         showDiscardAlert = true
@@ -53,10 +53,10 @@ struct AddJournalView: View {
                     }
                 } label: {
                     Image(systemName: "xmark")
-                        .font(.title3)
-                        .foregroundStyle(.white)
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundStyle(JournaliColors.primaryText)
                         .frame(width: 42, height: 42)
-                        .background(.white.opacity(0.12))
+                        .background(JournaliColors.buttonBackground)
                         .clipShape(Circle())
                 }
 
@@ -67,40 +67,40 @@ struct AddJournalView: View {
                     dismiss()
                 } label: {
                     Image(systemName: "checkmark")
-                        .font(.title3.bold())
-                        .foregroundStyle(.black)
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundStyle(JournaliColors.saveButtonText)
                         .frame(width: 46, height: 46)
-                        .background(
-                            Color(
-                                red: 0.72,
-                                green: 0.75,
-                                blue: 1
-                            )
-                        )
+                        .background(JournaliColors.primary)
                         .clipShape(Circle())
                 }
             }
+            .buttonStyle(.plain)
+            .padding(.bottom, 12)
 
             // MARK: - Journal Title
             TextField("Title", text: $journalTitle)
-                .font(.system(size: 32, weight: .bold))
-                .tint(.white)
+                .font(.system(size: 34, weight: .bold))
+                .foregroundStyle(JournaliColors.primaryText)
+                .tint(JournaliColors.primary)
+                .textInputAutocapitalization(.sentences)
 
             // MARK: - Date
             Text(journal?.date ?? Date(), style: .date)
-                .font(.subheadline)
-                .foregroundStyle(.white.opacity(0.8))
+                .font(.system(size: 16, weight: .regular))
+                .foregroundStyle(JournaliColors.secondaryText)
 
             // MARK: - Journal Content
             TextEditor(text: $journalText)
-                .font(.system(size: 18))
+                .font(.system(size: 18, weight: .regular))
+                .foregroundStyle(JournaliColors.primaryText)
+                .tint(JournaliColors.primary)
                 .scrollContentBackground(.hidden)
+                .background(JournaliColors.editorBackground)
                 .overlay(alignment: .topLeading) {
-
                     if journalText.isEmpty {
                         Text("Type your Journal...")
-                            .font(.system(size: 18))
-                            .foregroundStyle(.gray)
+                            .font(.system(size: 18, weight: .regular))
+                            .foregroundStyle(JournaliColors.placeholderText)
                             .padding(.top, 8)
                             .padding(.leading, 5)
                             .allowsHitTesting(false)
@@ -110,11 +110,12 @@ struct AddJournalView: View {
             Spacer(minLength: 0)
         }
         .padding(24)
-        .foregroundStyle(.white)
-        .background(
-            Color(red: 0.29, green: 0.29, blue: 0.33)
-        )
-        .preferredColorScheme(.dark)
+        .foregroundStyle(JournaliColors.primaryText)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(JournaliColors.editorBackground.ignoresSafeArea())
+
+        // .preferredColorScheme(.dark)
+
         .interactiveDismissDisabled(hasChanges)
 
         // MARK: - Discard Confirmation
@@ -130,7 +131,6 @@ struct AddJournalView: View {
             }
 
             Button("Keep Editing", role: .cancel) {}
-
         } message: {
             Text(
                 "Are you sure you want to discard changes on this journal?"
